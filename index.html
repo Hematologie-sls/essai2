@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Essais cliniques — Service d'Hématologie</title>
+<meta name="description" content="Catalogue raisonné des essais cliniques ouverts dans le service." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,30..100&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<!-- Texture grain papier en SVG, posée en arrière-plan global -->
+<svg class="grain" aria-hidden="true">
+  <filter id="noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.04 0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#noise)"/>
+</svg>
+
+<header class="masthead">
+  <div class="wrap masthead-inner">
+    <div class="brand">
+      <div class="brand-emblem">
+        <svg viewBox="0 0 40 40" width="36" height="36" aria-hidden="true">
+          <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="0.7"/>
+          <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="0.4"/>
+          <path d="M8 20 L14 20 L17 12 L23 28 L26 20 L32 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-line">Service d'Hématologie</div>
+        <div class="brand-title">Essais cliniques</div>
+      </div>
+    </div>
+    <nav class="masthead-actions">
+      <button id="theme-toggle" class="ghost-pill" aria-label="Basculer le thème">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button id="export-csv" class="ghost-pill" type="button">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Exporter</span>
+      </button>
+    </nav>
+  </div>
+  <div class="masthead-rule" aria-hidden="true"></div>
+</header>
+
+<main class="wrap">
+
+  <section class="overture">
+    <div class="overture-eyebrow">
+      <span class="eyebrow-line"></span>
+      <span>Recueil interne</span>
+      <span class="eyebrow-line"></span>
+    </div>
+    <h1 class="overture-title">
+      Un panorama <em>raisonné</em> <br>
+      des protocoles en cours.
+    </h1>
+    <p class="overture-lead">
+      Vingt-cinq essais cliniques classés, annotés et tenus à jour pour identifier en quelques secondes le protocole adapté à votre patient.
+    </p>
+
+    <div class="figures" id="stats"></div>
+  </section>
+
+  <section class="apparatus">
+    <div class="search-vessel">
+      <svg class="search-glass" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search" type="text" placeholder="Rechercher par nom, pathologie, traitement, investigateur…" autocomplete="off" />
+      <button id="clear-search" class="erase-btn" aria-label="Effacer la recherche" hidden>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="apparatus-row">
+      <div class="filters" id="filters"></div>
+      <div class="view-toggle" role="tablist" aria-label="Mode d'affichage">
+        <button class="view-opt active" data-view="table" role="tab" aria-selected="true">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          <span>Registre</span>
+        </button>
+        <button class="view-opt" data-view="cards" role="tab" aria-selected="false">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Fiches</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="meta-strip">
+      <span id="result-count" class="result-count"></span>
+      <button id="reset-filters" class="link-btn" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        Réinitialiser
+      </button>
+    </div>
+  </section>
+
+  <section id="results" class="results">
+    <div class="table-vessel" id="table-view">
+      <table class="register">
+        <thead>
+          <tr>
+            <th class="th-num">№</th>
+            <th data-sort="nom">Essai <span class="caret"></span></th>
+            <th data-sort="categorie">Pathologie <span class="caret"></span></th>
+            <th data-sort="phase">Phase <span class="caret"></span></th>
+            <th data-sort="sponsor">Promoteur <span class="caret"></span></th>
+            <th data-sort="statut">Statut <span class="caret"></span></th>
+            <th>Investigateur</th>
+            <th class="th-actions" aria-label="Actions"></th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+
+    <div class="cards-grid" id="cards-view" hidden></div>
+
+    <div class="empty" id="empty" hidden>
+      <div class="empty-mark">
+        <svg viewBox="0 0 60 60" width="60" height="60" fill="none" stroke="currentColor" stroke-width="0.6">
+          <circle cx="30" cy="30" r="28"/>
+          <circle cx="30" cy="30" r="20"/>
+          <path d="M22 30h16M30 22v16" stroke-width="0.8"/>
+        </svg>
+      </div>
+      <h3>Aucun protocole ne correspond</h3>
+      <p>Essayez d'élargir vos critères ou de réinitialiser la sélection.</p>
+    </div>
+  </section>
+
+</main>
+
+<aside id="detail-panel" class="folio" aria-hidden="true">
+  <div class="folio-veil" data-close></div>
+  <div class="folio-sheet" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <button class="folio-close" data-close aria-label="Fermer">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="folio-scroll">
+      <div class="folio-head">
+        <div class="folio-tags">
+          <span id="detail-phase" class="pill pill-phase"></span>
+          <span id="detail-status" class="pill pill-status"></span>
+          <span id="detail-category" class="pill pill-cat"></span>
+        </div>
+        <h2 id="detail-title"></h2>
+        <p id="detail-sponsor" class="folio-sponsor"></p>
+      </div>
+      <div class="folio-body" id="detail-body"></div>
+    </div>
+  </div>
+</aside>
+
+<footer class="colophon">
+  <div class="wrap colophon-inner">
+    <div class="colophon-rule" aria-hidden="true"></div>
+    <div class="colophon-text">
+      <span>Document à usage strictement interne au service.</span>
+      <span id="last-update"></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
